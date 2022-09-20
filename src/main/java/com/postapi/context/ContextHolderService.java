@@ -27,8 +27,9 @@ public class ContextHolderService {
 
     public void setContext(String username, String userType, List<String> permissions) {
         if (userType.equalsIgnoreCase(UserType.USER.name())) {
-            System.out.println(userType.equalsIgnoreCase(UserType.USER.name()));
             this.setContextForClient(username);
+        }else if(userType.equalsIgnoreCase(UserType.ADMIN.name())){
+            this.setContextForAdmin(username);
         }
     }
 
@@ -36,6 +37,14 @@ public class ContextHolderService {
         Optional<Users> userOptional = userRepository.findByUsername(username);
         userOptional.ifPresent(user -> {
             ContextHolder thread = new ContextHolder(user.getId(), user.getPhoneNumber(), UserType.USER.name());
+            thread.run();
+        });
+    }
+
+    private void setContextForAdmin(String username) {
+        Optional<Users> adminOptional = userRepository.findByUsername(username);
+        adminOptional.ifPresent(admin -> {
+            ContextHolder thread = new ContextHolder(admin.getId(), admin.getPhoneNumber(), UserType.ADMIN.name());
             thread.run();
         });
     }

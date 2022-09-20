@@ -14,6 +14,7 @@ import com.postapi.security.util.JwtTokenUtil;
 import com.postapi.security.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -159,7 +160,7 @@ public class UserImpl implements UserService {
             }
 
             userRepository.save(users);
-            final String token = getToken(users);
+            final String token = getTokenForValidation(users);
             return ValidateOtpResponse.builder().id(users.getId()).accessToken(token).build();
         } else {
             throw new RestException(OTP_INCORRECT, "Incorrect Otp");
@@ -167,7 +168,16 @@ public class UserImpl implements UserService {
     }
 
     private String getToken(Users users) {
+        if (users.getUserType().name().equals("ADMIN")){
+            return jwtTokenUtil.generateToken(prepareClaims(users.getUsername(), users.getId(), UserType.ADMIN.name()));
+        }
         return jwtTokenUtil.generateToken(prepareClaims(users.getUsername(), users.getId(), UserType.USER.name()));
+
+    }
+
+    private String getTokenForValidation(Users users){
+        return jwtTokenUtil.generateToken(prepareClaims(users.getUsername(), users.getId(), UserType.USER.name()));
+
     }
 
     private Map<String, Object> prepareClaims(String username, Long id, String userType) {

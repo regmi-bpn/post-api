@@ -5,6 +5,7 @@ import com.postapi.user.service.UserService;
 import com.postapi.user.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -65,6 +66,8 @@ public class UserController {
         return userService.updateUserInformation(request);
     }
 
+
+    @Secured("ADMIN")
     @GetMapping(value = INFORMATION)
     public UserInformationResponse getUserInformation() {
         log.info("Get user information");

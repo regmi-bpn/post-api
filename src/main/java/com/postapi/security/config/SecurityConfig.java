@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.authorizeRequests().antMatchers(USER_URLS).permitAll().and().authorizeRequests().antMatchers("/skmflsdfdsf/sdfsdnfkj").authenticated().and().httpBasic();
+        http.authorizeRequests().antMatchers(USER_URLS).permitAll().and().authorizeRequests().antMatchers("/user/**").authenticated().and().httpBasic();
     }
 
     public static final String[] USER_URLS = {
