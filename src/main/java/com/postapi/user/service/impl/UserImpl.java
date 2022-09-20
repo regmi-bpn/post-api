@@ -11,7 +11,6 @@ import com.postapi.security.validator.UserValidator;
 import com.postapi.user.dto.*;
 import com.postapi.security.util.HelperUtil;
 import com.postapi.security.util.JwtTokenUtil;
-import com.postapi.security.util.MailUtil;
 import com.postapi.security.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,16 +28,16 @@ import static com.postapi.user.constants.RegistrationStatus.*;
 @Service
 public class UserImpl implements UserService {
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    UserValidator userValidator;
+    private UserValidator userValidator;
 
     @Autowired
-    JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    ContextHolderService contextHolderService;
+    private ContextHolderService contextHolderService;
 
     @Override
     public RegisterResponse registerEmail(RegisterEmailRequest request) {
@@ -109,6 +108,24 @@ public class UserImpl implements UserService {
         return UserInformationResponse.builder().id(users.getId()).username(users.getUsername()).address(users.getAddress()).phoneNumber(users.getPhoneNumber()).build();
     }
 
+    @Override
+    public UpdateAdminRequest addAsAdmin(Long userId) {
+        Users users = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!!"));
+        users.setId(userId);
+        users.setUserType(UserType.ADMIN);
+        userRepository.save(users);
+        return UpdateAdminRequest.builder().id(userId).roles("ADMIN").build();
+    }
+
+    @Override
+    public UpdateAdminRequest addAsUser(Long userId) {
+        Users users = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!!"));
+        users.setId(userId);
+        users.setUserType(UserType.USER);
+        userRepository.save(users);
+        return UpdateAdminRequest.builder().id(userId).roles("USER").build();
+    }
+
 
     private Users prepareToAddClientInformation(AddInformationRequest request, Users users) {
         users.setPassword(SecurityUtil.encode(request.getPassword()));
@@ -118,6 +135,7 @@ public class UserImpl implements UserService {
         users.setAddress(request.getAddress());
         users.setPhoneNumber(request.getPhoneNumber());
         users.setRegistrationStatus(REGISTERED.name());
+        users.setUserType(UserType.USER);
         return users;
     }
 
@@ -169,7 +187,6 @@ public class UserImpl implements UserService {
 
     private RegisterResponse sendEmailOTPAndGetResponse(Users users) {
         users.setOtp(HelperUtil.generateNumeric(6));
-        log.info("Sending otp email:", users.getOtp());
         String message = "Dear sir/ma'am, \n\tYour Facebook's conformation code is ".concat(users.getOtp()).concat(". \nRegards,\nFacebook It team.");
         Users response = userRepository.save(users);
         return getRegisterResponse(response);

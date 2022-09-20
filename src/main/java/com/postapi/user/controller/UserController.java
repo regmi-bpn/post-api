@@ -16,7 +16,7 @@ import static com.postapi.constant.Route.*;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @PostMapping(value = USER_RESISTER_EMAIL)
     public RegisterResponse registerEmail(@Valid @RequestBody RegisterEmailRequest request) {
@@ -34,6 +34,16 @@ public class UserController {
     public ValidateOtpResponse validateOtp(@Valid @RequestBody ValidateOtpRequest request) {
         log.info("Validate user otp:: {}", request);
         return userService.validateOtp(request);
+    }
+
+    @PatchMapping(value = SET_ADMIN)
+    public UpdateAdminRequest addAsAdmin(@PathVariable("userId") Long userId) {
+        return userService.addAsAdmin(userId);
+    }
+
+    @PatchMapping(value = SET_USER)
+    public UpdateAdminRequest addAsUser(@PathVariable("userId") Long userId) {
+        return userService.addAsUser(userId);
     }
 
     @PostMapping(value = ADD_INFORMATION)

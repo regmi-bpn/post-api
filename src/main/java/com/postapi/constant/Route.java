@@ -35,5 +35,9 @@ public class Route {
     public static final String EDIT_REPLY = REPLY + "/reply";
     public static final String DELETE_REPLY = REPLY + "/reply/{id}";
 
+    //admin
+    public static final String SET_ADMIN = "/admin"+"/{userId}";
+    public static final String SET_USER = "/user"+"/{userId}";
+
 
 }

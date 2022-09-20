@@ -2,6 +2,7 @@ package com.postapi.user.entity;
 
 
 import com.postapi.user.constants.RegistrationStatus;
+import com.postapi.user.constants.UserType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -44,4 +45,7 @@ public class  Users {
 
     @Column(name = "registration_status")
     private String registrationStatus= RegistrationStatus.OTP_PENDING.name();
+
+    @Enumerated(value = EnumType.STRING)
+    private UserType userType;
 }

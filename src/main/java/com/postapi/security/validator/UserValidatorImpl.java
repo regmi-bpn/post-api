@@ -16,7 +16,7 @@ import java.util.Optional;
 public class UserValidatorImpl implements UserValidator {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public Users validateUserByUserNameForRegistration(String email) {

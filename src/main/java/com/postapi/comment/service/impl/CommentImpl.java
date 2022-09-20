@@ -23,14 +23,14 @@ import java.util.Optional;
 public class CommentImpl implements CommentService {
 
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     @Autowired
-    ContextHolderService contextHolderService;
+    private ContextHolderService contextHolderService;
     @Autowired
-    UserValidator userValidator;
+    private UserValidator userValidator;
     @Autowired
-    NewsFeedRepository newsFeedRepository;
+    private NewsFeedRepository newsFeedRepository;
 
     @Override
     public AddCommentResponse addComment(AddCommentRequest request) {
@@ -51,14 +51,12 @@ public class CommentImpl implements CommentService {
             Comment addComment = commentRepository.save(comment);
             return prepareToAddCommentResponse(optionalNewsFeed.get(), users, addComment);
         }
-//        comment.set_reply(true);
 
 
     }
 
     @Override
     public AddCommentResponse updateComment(UpdateCommentRequest request) {
-//        Users users = userValidator.validateUser(contextHolderService.getContext().getUserId(), contextHolderService.getContext().getUserType());
         Comment comment = getCommentResponse(request.getId());
         comment.setComment(request.getComment());
         commentRepository.save(comment);

@@ -9,11 +9,6 @@ public class ContextHolder implements Runnable {
     private final String userType;
     private List<String> permissions;
 
-    // public ContextHolder(Long userId, String username) {
-    // this.userId = userId;
-    // this.username = username;
-    // }
-
     public ContextHolder(Long userId, String username, String userType, List<String> permissions) {
         this.userId = userId;
         this.username = username;

@@ -17,4 +17,7 @@ public interface UserService {
     UserInformationResponse updateUserInformation(UpdateInformationRequest request);
 
     UserInformationResponse getUserInformation();
+
+    UpdateAdminRequest addAsAdmin(Long userId);
+    UpdateAdminRequest addAsUser(Long userId);
 }

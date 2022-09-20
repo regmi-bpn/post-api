@@ -23,16 +23,16 @@ import java.util.Optional;
 public class NewsFeedImpl implements NewsFeedService {
 
     @Autowired
-    UserValidator userValidator;
+    private UserValidator userValidator;
 
     @Autowired
-    ContextHolderService contextHolderService;
+    private ContextHolderService contextHolderService;
 
     @Autowired
-    NewsFeedRepository newsFeedRepository;
+    private NewsFeedRepository newsFeedRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
     public PostNewsFeedResponse postNewsFeed(PostNewsFeedRequest request) {

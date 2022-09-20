@@ -17,7 +17,7 @@ import static com.postapi.constant.Route.*;
 public class CommentController {
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
 
     @PostMapping(value = ADD_COMMENT)
     public AddCommentResponse addComment(@Valid @RequestBody AddCommentRequest request) {
