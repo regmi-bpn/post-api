@@ -22,15 +22,19 @@ import java.util.Optional;
 @Service
 public class CommentImpl implements CommentService {
 
-    @Autowired
     private CommentRepository commentRepository;
 
-    @Autowired
     private ContextHolderService contextHolderService;
-    @Autowired
     private UserValidator userValidator;
-    @Autowired
     private NewsFeedRepository newsFeedRepository;
+
+    @Autowired
+    public CommentImpl(CommentRepository commentRepository, ContextHolderService contextHolderService, UserValidator userValidator, NewsFeedRepository newsFeedRepository) {
+        this.commentRepository = commentRepository;
+        this.contextHolderService = contextHolderService;
+        this.userValidator = userValidator;
+        this.newsFeedRepository = newsFeedRepository;
+    }
 
     @Override
     public AddCommentResponse addComment(AddCommentRequest request) {
@@ -126,7 +130,7 @@ public class CommentImpl implements CommentService {
         return NewsFeedResponseForComment.builder().newsFeedId(comment.getNewsFeed().getId()).newsFeed(comment.getNewsFeed().getMessage()).build();
     }
 
-    private CommentData prepareCommentData(Comment comment){
+    private CommentData prepareCommentData(Comment comment) {
         return CommentData.builder().commentId(comment.getId()).userId(comment.getUsers().getId()).username(comment.getUsers().getUsername()).
                 commentMessage(comment.getComment()).replyCommentData(prepareReply(comment.getId())).build();
     }

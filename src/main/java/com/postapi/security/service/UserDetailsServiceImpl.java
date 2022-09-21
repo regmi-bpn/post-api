@@ -18,24 +18,29 @@ import java.util.Optional;
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
+
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Users> user = userRepository.findByEmail(email);
-        if (user == null){
-            throw new UsernameNotFoundException("Email" +email + "not found.");
+        if (user == null) {
+            throw new UsernameNotFoundException("Email" + email + "not found.");
         }
         return new User(user.get().getEmail(), user.get().getPassword(), getGrantedAuthority(user));
 
     }
 
 
-    private Collection<GrantedAuthority> getGrantedAuthority(Optional<Users> users){
+    private Collection<GrantedAuthority> getGrantedAuthority(Optional<Users> users) {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (users.get().getUserType().name().equalsIgnoreCase("ADMIN")){
+        if (users.get().getUserType().name().equalsIgnoreCase("ADMIN")) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));

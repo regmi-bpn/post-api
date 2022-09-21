@@ -22,17 +22,21 @@ import java.util.Optional;
 @Service
 public class NewsFeedImpl implements NewsFeedService {
 
-    @Autowired
-    private UserValidator userValidator;
+    private final UserValidator userValidator;
+
+    private final ContextHolderService contextHolderService;
+
+    private final NewsFeedRepository newsFeedRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    private ContextHolderService contextHolderService;
-
-    @Autowired
-    private NewsFeedRepository newsFeedRepository;
-
-    @Autowired
-    private UserRepository userRepository;
+    public NewsFeedImpl(UserValidator userValidator, ContextHolderService contextHolderService, NewsFeedRepository newsFeedRepository, UserRepository userRepository) {
+        this.userValidator = userValidator;
+        this.contextHolderService = contextHolderService;
+        this.newsFeedRepository = newsFeedRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public PostNewsFeedResponse postNewsFeed(PostNewsFeedRequest request) {
@@ -74,11 +78,12 @@ public class NewsFeedImpl implements NewsFeedService {
     public DeleteNewsFeedResponse deleteNewsFeed(Long id) {
         validateNewsFeed(id);
         newsFeedRepository.deleteNewsFeed(id);
-        return DeleteNewsFeedResponse.builder().newsFeedId(id).message("newsfeed of "+id+" deleted").build();
+        return DeleteNewsFeedResponse.builder().newsFeedId(id).message("newsfeed of " + id + " deleted").build();
     }
-    private void validateNewsFeed(Long id){
-        Optional<NewsFeed> optionalNewsFeed= newsFeedRepository.getNewsFeed(id);
-        if (optionalNewsFeed.isEmpty()){
+
+    private void validateNewsFeed(Long id) {
+        Optional<NewsFeed> optionalNewsFeed = newsFeedRepository.getNewsFeed(id);
+        if (optionalNewsFeed.isEmpty()) {
             throw new RestException(ErrorMessage.INVALID_NEWSFEED_ID);
         }
     }

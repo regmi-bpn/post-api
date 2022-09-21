@@ -23,7 +23,7 @@ public class Comment {
     private Users users;
 
     @Column(name = "is_reply")
-    private boolean is_reply=false;
+    private boolean is_reply = false;
 
     @Column(name = "reply_id")
     private Long replyId;

@@ -28,7 +28,7 @@ public class ContextHolderService {
     public void setContext(String username, String userType, List<String> permissions) {
         if (userType.equalsIgnoreCase(UserType.USER.name())) {
             this.setContextForClient(username);
-        }else if(userType.equalsIgnoreCase(UserType.ADMIN.name())){
+        } else if (userType.equalsIgnoreCase(UserType.ADMIN.name())) {
             this.setContextForAdmin(username);
         }
     }

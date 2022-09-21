@@ -6,7 +6,6 @@ import com.postapi.user.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,8 +16,11 @@ import static com.postapi.constant.Route.*;
 @RestController
 public class UserController {
 
+    private final UserService userService;
     @Autowired
-    private UserService userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping(value = USER_RESISTER_EMAIL)
     public RegisterResponse registerEmail(@Valid @RequestBody RegisterEmailRequest request) {
@@ -38,11 +40,13 @@ public class UserController {
         return userService.validateOtp(request);
     }
 
+    @Secured("ROLE_ADMIN")
     @PatchMapping(value = SET_ADMIN)
     public UpdateAdminRequest addAsAdmin(@PathVariable("userId") Long userId) {
         return userService.addAsAdmin(userId);
     }
 
+    @Secured("ROLE_ADMIN")
     @PatchMapping(value = SET_USER)
     public UpdateAdminRequest addAsUser(@PathVariable("userId") Long userId) {
         return userService.addAsUser(userId);
@@ -50,7 +54,6 @@ public class UserController {
 
     @PostMapping(value = ADD_INFORMATION)
     public AddInformationResponse<Long> addInformation(@Valid @RequestBody AddInformationRequest request) {
-        System.out.println(request);
         log.info("Add user information :: {}", request);
         return userService.addInformation(request);
     }
@@ -67,7 +70,6 @@ public class UserController {
         return userService.updateUserInformation(request);
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping(value = INFORMATION)
     public UserInformationResponse getUserInformation() {
         log.info("Get user information");

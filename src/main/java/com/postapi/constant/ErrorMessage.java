@@ -37,26 +37,11 @@ public enum ErrorMessage {
     SERVICE_IMAGE_NOT_PRESENT("CSS002", "Service image is not present."),
     SERVICE_NAME_ALREADY_PRESENT("CSS003", "Service name is already present."),
 
-    // Request lead service
-    REQUESTED_LEAD_ID_NOT_PRESENT("RLS001", "Can not find request lead with the given information."),
-    LEAD_STATUS_NOT_REQUESTED("RLS002", "Lead not requested to change it to assigned."),
-    LEAD_NOT_ASSIGNED_TO_COMPLETE("RLS003", "Lead not assigned to complete."),
 
-    // lead validator
-    LEAD_ID_NOT_VALID("LV001", "Can not find lead from the gicen information."),
 
-    // support
-    SUPPORT_ID_NOT_VALID("SS001", "Support id not valid"),
-    SUPPORT_NOT_PENDING_TO_COMPLETE("SS002", "Support not pending to complete."),
-    NOT_VALID_SUPPORT_STATUS("SS003", "Not valid support status"),
 
-    // about_us
-    NOT_VALID_ABOUT_US("AUS001", "Not valid about us id"), NOT_VALID_WORK("AUS002", "Not valid out work id"),
-    CAN_NOT_DISABLE_DETAIL("AUS003", "Can not disable detail"),
 
-    // chat room service
-    LEAD_NOT_ASSIGNED_TO_CHAT("CR001", "Lead not assigned to start to chat."),
-    NOT_YOUR_LEAD("CR002", "This is not your lead."),
+
 
     ;
 

@@ -16,8 +16,11 @@ import static com.postapi.constant.Route.*;
 @RestController
 public class CommentController {
 
+    private final CommentService commentService;
     @Autowired
-    private CommentService commentService;
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     @PostMapping(value = ADD_COMMENT)
     public AddCommentResponse addComment(@Valid @RequestBody AddCommentRequest request) {
@@ -30,12 +33,12 @@ public class CommentController {
     }
 
     @GetMapping(value = GET_COMMENT)
-    public List<CommentResponse> getAllComment(){
+    public List<CommentResponse> getAllComment() {
         return commentService.getAllComment();
     }
 
     @DeleteMapping(value = DELETE_COMMENT)
-    public DeleteCommentResponse deleteComment(@Valid @PathVariable Long id){
+    public DeleteCommentResponse deleteComment(@Valid @PathVariable Long id) {
         return commentService.deleteComment(id);
     }
 }

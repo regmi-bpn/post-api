@@ -1,7 +1,8 @@
-package com.postapi.reaction.services;
+package com.postapi.reaction.services.impl;
 
 
 import com.postapi.feed.entity.NewsFeed;
+import com.postapi.reaction.services.ReactionServices;
 import com.postapi.user.entity.Users;
 import com.postapi.reaction.constants.ReactionType;
 import com.postapi.reaction.entity.Reaction;
@@ -9,15 +10,21 @@ import com.postapi.reaction.entity.ReactionId;
 import com.postapi.reaction.repository.ReactionRepository;
 import com.postapi.feed.repository.NewsFeedRepository;
 import com.postapi.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 public class ReactionImpl implements ReactionServices {
     private final NewsFeedRepository newsFeedRepository;
     private final UserRepository userRepository;
     private final ReactionRepository reactionRepository;
+
+    @Autowired
+    public ReactionImpl(NewsFeedRepository newsFeedRepository, UserRepository userRepository, ReactionRepository reactionRepository) {
+        this.newsFeedRepository = newsFeedRepository;
+        this.userRepository = userRepository;
+        this.reactionRepository = reactionRepository;
+    }
 
 
     @Override

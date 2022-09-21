@@ -27,17 +27,22 @@ import static com.postapi.user.constants.RegistrationStatus.*;
 @Slf4j
 @Service
 public class UserImpl implements UserService {
-    @Autowired
-    private UserRepository userRepository;
+
+    private final UserRepository userRepository;
+
+    private final UserValidator userValidator;
+
+    private final JwtTokenUtil jwtTokenUtil;
+
+    private final ContextHolderService contextHolderService;
 
     @Autowired
-    private UserValidator userValidator;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private ContextHolderService contextHolderService;
+    public UserImpl(UserRepository userRepository, UserValidator userValidator, JwtTokenUtil jwtTokenUtil, ContextHolderService contextHolderService) {
+        this.userRepository = userRepository;
+        this.userValidator = userValidator;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.contextHolderService = contextHolderService;
+    }
 
     @Override
     public RegisterResponse registerEmail(RegisterEmailRequest request) {

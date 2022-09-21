@@ -16,8 +16,12 @@ import static com.postapi.constant.Route.*;
 @RestController
 public class NewsFeedController {
 
+    private final NewsFeedService newsFeedService;
+
     @Autowired
-    private NewsFeedService newsFeedService;
+    public NewsFeedController(NewsFeedService newsFeedService) {
+        this.newsFeedService = newsFeedService;
+    }
 
     @PostMapping(value = POST_NEWS_FEED)
     public PostNewsFeedResponse postNewsFeed(@Valid @RequestBody PostNewsFeedRequest request) {
