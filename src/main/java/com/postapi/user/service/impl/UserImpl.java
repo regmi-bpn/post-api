@@ -14,7 +14,6 @@ import com.postapi.security.util.JwtTokenUtil;
 import com.postapi.security.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -43,6 +42,7 @@ public class UserImpl implements UserService {
     @Override
     public RegisterResponse registerEmail(RegisterEmailRequest request) {
         Users validUsers = userValidator.validateUserByUserNameForRegistration(request.getEmail());
+        validateConfirmNewPasswordMismatch(request.getPassword(), request.getConfirmPassword());
         if (validUsers != null) {
             return sendEmailOTPAndGetResponse(validUsers);
         }
@@ -70,7 +70,6 @@ public class UserImpl implements UserService {
 
     @Override
     public AddInformationResponse<Long> addInformation(AddInformationRequest request) {
-        validateConfirmNewPasswordMismatch(request.getPassword(), request.getConfirmPassword());
         Users users = userValidator.validateUser(contextHolderService.getContext().getUserId(), contextHolderService.getContext().getUserType());
         validateClientCanAddInformation(users);
         userRepository.save(prepareToAddClientInformation(request, users));
@@ -129,14 +128,11 @@ public class UserImpl implements UserService {
 
 
     private Users prepareToAddClientInformation(AddInformationRequest request, Users users) {
-        users.setPassword(SecurityUtil.encode(request.getPassword()));
-        users.setConfirmPassword(SecurityUtil.encode(request.getConfirmPassword()));
         users.setFirstName(request.getFirstName());
         users.setLastName(request.getLastName());
         users.setAddress(request.getAddress());
         users.setPhoneNumber(request.getPhoneNumber());
         users.setRegistrationStatus(REGISTERED.name());
-        users.setUserType(UserType.USER);
         return users;
     }
 
@@ -148,7 +144,7 @@ public class UserImpl implements UserService {
 
     private void validateConfirmNewPasswordMismatch(String password, String confirmPassword) {
         if (!password.equals(confirmPassword)) {
-            throw new RestException(PASSWORD_CONFORM_PASSWORD_DOES_NOT_MATCH);
+            throw new RestException(PASSWORD_CONFIRM_PASSWORD_DOES_NOT_MATCH);
         }
     }
 
@@ -192,6 +188,9 @@ public class UserImpl implements UserService {
         Users users = new Users();
         users.setEmail(request.getEmail());
         users.setUsername(request.getEmail());
+        users.setPassword(SecurityUtil.encode(request.getPassword()));
+        users.setConfirmPassword(SecurityUtil.encode(request.getConfirmPassword()));
+        users.setUserType(UserType.USER);
         return users;
     }
 

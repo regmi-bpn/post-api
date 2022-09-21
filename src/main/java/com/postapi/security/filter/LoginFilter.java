@@ -3,11 +3,17 @@ package com.postapi.security.filter;
 import com.google.gson.Gson;
 
 import com.postapi.context.ContextHolderService;
+import com.postapi.security.service.UserDetailsServiceImpl;
 import com.postapi.user.constants.ErrorMessage;
 import com.postapi.security.util.JwtTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
@@ -25,10 +31,13 @@ public class LoginFilter implements Filter {
     private final JwtTokenUtil jwtTokenUtil;
     private final ContextHolderService contextHolderService;
 
+    private final UserDetailsServiceImpl userDetailsService;
+
     @Autowired
-    public LoginFilter(JwtTokenUtil jwtTokenUtil, ContextHolderService contextHolderService) {
+    public LoginFilter(JwtTokenUtil jwtTokenUtil, ContextHolderService contextHolderService, UserDetailsServiceImpl userDetailsService) {
         this.jwtTokenUtil = jwtTokenUtil;
         this.contextHolderService = contextHolderService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -57,6 +66,11 @@ public class LoginFilter implements Filter {
                 List<String> permissions = jwtTokenUtil.getPermissions(jwtToken);
                 log.info("Username from token:: " + username + " " + userType);
                 contextHolderService.setContext(username, userType, permissions);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new
+                        UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             } else {
                 prepareException(response, "JWT token not valid", request.getRequestURI(), HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
                 return;
@@ -102,7 +116,7 @@ public class LoginFilter implements Filter {
 
         final String WEB_SOCKET_CONNECTION = "/support/support";
 
-        List<String> byPassUrl = Arrays.asList(ADMIN_LOGIN, TERMS_CONDITION, PRIVACY_POLICY, COUNTRY, USER_REGISTER_EMAIL, USER_REGISTER_PHONE, USER_RESEND_OTP,USER_VALIDATE_OTP, WEB_SOCKET_CONNECTION, USER_LOGIN, USER_TEMPORARY_LOGIN
+        List<String> byPassUrl = Arrays.asList(ADMIN_LOGIN,TERMS_CONDITION, PRIVACY_POLICY, COUNTRY, USER_REGISTER_EMAIL, USER_REGISTER_PHONE, USER_RESEND_OTP,USER_VALIDATE_OTP, WEB_SOCKET_CONNECTION, USER_LOGIN, USER_TEMPORARY_LOGIN
                 // REQUEST_LEAD, VIEW_COMPANY_SERVICE, VIEW_COMPANY_BRANCH
 
         );

@@ -51,7 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/newsfeed/post-news-feed",
             "/newsfeed/news-feed",
             "/newsfeed/news-feed/{id}",
-            "/newsfeed/news-feed"
+            "/newsfeed/news-feed",
+            "/user/information"
 
 
     };

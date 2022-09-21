@@ -12,7 +12,7 @@ public enum ErrorMessage {
     OTP_RESEND_EXCEEDED("CS003"), NOT_VALID_USER_NAME("CS004", "User with the given credential can not be found."),
     OTP_CAN_NOT_BE_SEND("CS005", "Otp can not be sent."), NOT_VALID_EMAIL("CS006", "Provided email is not valid"),
     NOT_VALID_ID("CS007", "Can not find user from the given credential."),
-    PASSWORD_CONFORM_PASSWORD_DOES_NOT_MATCH("CS007", "Password and confirm password mismatched"),
+    PASSWORD_CONFIRM_PASSWORD_DOES_NOT_MATCH("CS007", "Password and confirm password mismatched"),
     OTP_GUESS_OVER("CS008", "Otp guess over"), OTP_INCORRECT("CS009"),
     INVALID_LOGIN_CREDENTIAL("CS010", "Provided credential is not valid."),
     USER_ALREADY_ADDED_INFORMATION("CS011", "User has already added information"),
